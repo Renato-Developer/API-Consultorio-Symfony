@@ -8,6 +8,7 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
+        '/ola' => [[['_route' => 'app_olamundo_olamundo', '_controller' => 'App\\Controller\\OlaMundoController::olaMundoAction'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
