@@ -8,7 +8,9 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
+        '/medico' => [[['_route' => 'app_medico_novo', '_controller' => 'App\\Controller\\MedicoController::novo'], null, ['POST' => 0], null, false, false, null]],
         '/ola' => [[['_route' => 'app_olamundo_olamundo', '_controller' => 'App\\Controller\\OlaMundoController::olaMundoAction'], null, null, null, false, false, null]],
+        '/hello' => [[['_route' => 'app_olamundo_hello', '_controller' => 'App\\Controller\\OlaMundoController::helloAction'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

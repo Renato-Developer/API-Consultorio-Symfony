@@ -25,4 +25,12 @@ class OlaMundoController
         ];
         return new JsonResponse($response, 200, );
     }
+
+    /**
+     * @Route("hello")
+     */
+    public function helloAction(Request $request): Response
+    {
+        return new Response('Hello!');
+    }
 }
