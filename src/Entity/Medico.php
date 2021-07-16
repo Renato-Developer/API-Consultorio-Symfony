@@ -1,12 +1,30 @@
 <?php
 
-
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 
-class Medico
+/**
+ * @ORM\Entity
+ */
+class Medico implements \JsonSerializable
 {
+
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private int $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private string $nome;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
     private string $crm;
 
     public function __construct(string $nome , string $crm)
@@ -16,13 +34,12 @@ class Medico
         $this->crm = $crm;
     }
 
-    public function getMedico(): array
+    public function jsonSerialize(): array
     {
-        $dados = [
+        return [
+            'id' => $this->id,
             "nome" => $this->nome,
             "crm" => $this->crm
         ];
-
-        return $dados;
     }
 }
