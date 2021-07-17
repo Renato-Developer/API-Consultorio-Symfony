@@ -34,6 +34,16 @@ class Medico implements \JsonSerializable
         $this->crm = $crm;
     }
 
+    public function setNome(string $nome): void
+    {
+        $this->nome = $nome;
+    }
+
+    public function setCrm(int $crm): void
+    {
+        $this->crm = $crm;
+    }
+
     public function jsonSerialize(): array
     {
         return [

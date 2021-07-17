@@ -4,9 +4,8 @@
 namespace App\Controller;
 
 use App\Entity\Medico;
-use Doctrine\ORM\EntityManager;
+use App\Helper\MedicoFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,9 +27,7 @@ class MedicoController extends AbstractController
     public function novoMedico(Request $request): Response
     {
         $body = $request->getContent();
-        $jsonBody = json_decode($body);
-
-        $medico = new Medico($jsonBody->nome, $jsonBody->crm);
+        $medico = MedicoFactory::criarMedico($body);
 
         $this->entityManager->persist($medico);
         $this->entityManager->flush();
@@ -55,17 +52,58 @@ class MedicoController extends AbstractController
     /**
      * @Route("/medicos/{id}", methods="GET")
      */
-    public function medicoPorId(Request $request): Response
+    public function medicoPorId(int $id): Response
     {
-        $id = $request->get('id');
+        $medico = $this->buscaMedicoPorId($id);
+        $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : 200;
+
+        return new JsonResponse($medico, $codigoRetorno);
+    }
+
+    /**
+     * @Route("medicos/{id}", methods="PUT")
+     */
+    public function atualizarMedico(int $id, Request $request): Response
+    {
+        $medico = $this->buscaMedicoPorId($id);
+        if (is_null($medico)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $body = $request->getContent();
+        $dadosEmJson = json_decode($body);
+
+        $medico->setNome($dadosEmJson->nome);
+        $medico->setCrm($dadosEmJson->crm);
+
+        $this->entityManager->flush();
+
+        return new JsonResponse($medico, 200);
+    }
+
+    /**
+     * @Route("medicos/{id}", methods="DELETE")
+     */
+    public function removerMedico(int $id): Response
+    {
+        $medico = $this->buscaMedicoPorId($id);
+
+        if (is_null($medico)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $this->entityManager->remove($medico);
+        $this->entityManager->flush();
+
+        return new Response('', 200);
+    }
+
+    private function buscaMedicoPorId(int $id): Medico
+    {
         $medicosRepository = $this
             ->getDoctrine()
             ->getRepository(Medico::class);
 
-        $medico = $medicosRepository->find($id);
-
-        $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : 200;
-
-        return new JsonResponse($medico, $codigoRetorno);
+        return $medicosRepository->find($id);
     }
 }
