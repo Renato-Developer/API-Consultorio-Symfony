@@ -8,6 +8,7 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
+        '/especialidades' => [[['_route' => 'app_especialidades_novaespecialidade', '_controller' => 'App\\Controller\\EspecialidadesController::novaEspecialidade'], null, ['POST' => 0], null, false, false, null]],
         '/medicos' => [
             [['_route' => 'app_medico_novomedico', '_controller' => 'App\\Controller\\MedicoController::novoMedico'], null, ['POST' => 0], null, false, false, null],
             [['_route' => 'app_medico_buscarmedicos', '_controller' => 'App\\Controller\\MedicoController::buscarMedicos'], null, ['GET' => 0], null, false, false, null],

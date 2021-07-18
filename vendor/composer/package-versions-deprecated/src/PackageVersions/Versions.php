@@ -52,6 +52,7 @@ final class Versions
   'doctrine/sql-formatter' => '1.1.1@56070bebac6e77230ed7d306ad13528e60732871',
   'friendsofphp/proxy-manager-lts' => 'v1.0.5@006aa5d32f887a4db4353b13b5b5095613e0611f',
   'laminas/laminas-code' => '4.4.2@54251ab2b16c41c6980387839496b235f5f6e10b',
+  'nikic/php-parser' => 'v4.11.0@fe14cf3672a149364fb66dfe11bf6549af899f94',
   'psr/cache' => '1.0.1@d11b50ad223250cf17b86e38383413f5a6764bf8',
   'psr/container' => '1.1.1@8622567409010282b7aeebe4bb841fe98b58dcaf',
   'psr/event-dispatcher' => '1.0.0@dbefd12671e8a14ec7f180cab83036ed26714bb0',
@@ -75,7 +76,7 @@ final class Versions
   'symfony/http-client-contracts' => 'v2.4.0@7e82f6084d7cae521a75ef2cb5c9457bbda785f4',
   'symfony/http-foundation' => 'v5.3.3@0e45ab1574caa0460d9190871a8ce47539e40ccf',
   'symfony/http-kernel' => 'v5.3.3@90ad9f4b21ddcb8ebe9faadfcca54929ad23f9f8',
-  'symfony/orm-pack' => 'v2.1.0@357f6362067b1ebb94af321b79f8939fc9118751',
+  'symfony/maker-bundle' => 'v1.33.0@f093d906c667cba7e3f74487d9e5e55aaf25a031',
   'symfony/polyfill-intl-grapheme' => 'v1.23.0@24b72c6baa32c746a4d0840147c9715e42bb68ab',
   'symfony/polyfill-intl-normalizer' => 'v1.23.0@8590a5f561694770bdcd3f9b5c69dde6945028e8',
   'symfony/polyfill-mbstring' => 'v1.23.0@2df51500adbaebdc4c38dea4c89a2e131c45c8a1',
@@ -91,10 +92,10 @@ final class Versions
   'symfony/var-dumper' => 'v5.3.3@46aa709affb9ad3355bd7a810f9662d71025c384',
   'symfony/var-exporter' => 'v5.3.3@903c2c0babd6267de5bcb2995e8fc1efb5f01f1f',
   'symfony/yaml' => 'v5.3.3@485c83a2fb5893e2ff21bf4bfc7fdf48b4967229',
-  'symfony/polyfill-ctype' => '*@4a02c014839d7024a536bdeba6901e17f8ddca23',
-  'symfony/polyfill-iconv' => '*@4a02c014839d7024a536bdeba6901e17f8ddca23',
-  'symfony/polyfill-php72' => '*@4a02c014839d7024a536bdeba6901e17f8ddca23',
-  '__root__' => 'dev-master@4a02c014839d7024a536bdeba6901e17f8ddca23',
+  'symfony/polyfill-ctype' => '*@3c07d9543d13104e39350a91d175216a3a58ce6c',
+  'symfony/polyfill-iconv' => '*@3c07d9543d13104e39350a91d175216a3a58ce6c',
+  'symfony/polyfill-php72' => '*@3c07d9543d13104e39350a91d175216a3a58ce6c',
+  '__root__' => 'dev-master@3c07d9543d13104e39350a91d175216a3a58ce6c',
 );
 
     private function __construct()
