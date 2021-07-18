@@ -171,6 +171,7 @@
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Helper\MedicoFactory"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.W9y3dzm.App\Controller\MedicoController"/>
       </call>
@@ -180,6 +181,7 @@
     </service>
     <service id="App\Helper\MedicoFactory" class="App\Helper\MedicoFactory" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
+      <argument type="service" id="App\Repository\EspecialidadeRepository"/>
     </service>
     <service id="App\Repository\EspecialidadeRepository" class="App\Repository\EspecialidadeRepository" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>

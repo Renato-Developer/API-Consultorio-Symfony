@@ -33,11 +33,12 @@ class Medico implements \JsonSerializable
      */
     private $especialidade;
 
-    public function __construct(string $nome , string $crm)
+    public function __construct(string $nome , string $crm, Especialidade $especialidade)
     {
 
         $this->nome = $nome;
         $this->crm = $crm;
+        $this->especialidade = $especialidade;
     }
 
     public function setNome(string $nome): void
@@ -50,13 +51,19 @@ class Medico implements \JsonSerializable
         $this->crm = $crm;
     }
 
-    public function jsonSerialize(): array
+    public function setEspecialidade(Especialidade $especialidade): void
     {
-        return [
-            'id' => $this->id,
-            "nome" => $this->nome,
-            "crm" => $this->crm
-        ];
+        $this->especialidade = $especialidade;
+    }
+
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    public function getCrm()
+    {
+        return $this->crm;
     }
 
     public function getEspecialidade(): ?Especialidade
@@ -64,10 +71,13 @@ class Medico implements \JsonSerializable
         return $this->especialidade;
     }
 
-    public function setEspecialidade(?Especialidade $especialidade): self
+    public function jsonSerialize(): array
     {
-        $this->especialidade = $especialidade;
-
-        return $this;
+        return [
+            'id' => $this->id,
+            "nome" => $this->nome,
+            "crm" => $this->crm,
+            "especialidade" => $this->especialidade
+        ];
     }
 }

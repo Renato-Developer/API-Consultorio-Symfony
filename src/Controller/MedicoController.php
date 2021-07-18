@@ -3,8 +3,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Especialidade;
 use App\Entity\Medico;
 use App\Helper\MedicoFactory;
+use App\Repository\EspecialidadeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,10 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MedicoController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private MedicoFactory $medicoFactory;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory)
     {
         $this->entityManager = $entityManager;
+        $this->medicoFactory = $medicoFactory;
     }
 
     /**
@@ -27,7 +31,7 @@ class MedicoController extends AbstractController
     public function novoMedico(Request $request): Response
     {
         $body = $request->getContent();
-        $medico = MedicoFactory::criarMedico($body);
+        $medico = $this->medicoFactory->criarMedico($body);
 
         $this->entityManager->persist($medico);
         $this->entityManager->flush();
@@ -65,16 +69,17 @@ class MedicoController extends AbstractController
      */
     public function atualizarMedico(int $id, Request $request): Response
     {
+        $body = $request->getContent();
+        $medicoEnviado = $this->medicoFactory->criarMedico($body);
+
         $medico = $this->buscaMedicoPorId($id);
         if (is_null($medico)) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $body = $request->getContent();
-        $dadosEmJson = json_decode($body);
-
-        $medico->setNome($dadosEmJson->nome);
-        $medico->setCrm($dadosEmJson->crm);
+        $medico->setNome($medicoEnviado->getNome());
+        $medico->setCrm($medicoEnviado->getCrm());
+        $medico->setEspecialidade($medicoEnviado->getEspecialidade());
 
         $this->entityManager->flush();
 
@@ -104,6 +109,7 @@ class MedicoController extends AbstractController
             ->getDoctrine()
             ->getRepository(Medico::class);
 
+        /**@var Medico $medicosRepository*/
         return $medicosRepository->find($id);
     }
 }

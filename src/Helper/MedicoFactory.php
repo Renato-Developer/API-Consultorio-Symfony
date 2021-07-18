@@ -4,12 +4,22 @@
 namespace App\Helper;
 
 use App\Entity\Medico;
+use App\Repository\EspecialidadeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class MedicoFactory
 {
-    public static function criarMedico(string $json): Medico
+    private EspecialidadeRepository $especialidadeRepository;
+
+    public function __construct(EspecialidadeRepository $especialidadeRepository)
+    {
+        $this->especialidadeRepository = $especialidadeRepository;
+    }
+
+    public function criarMedico(string $json): Medico
     {
         $json = json_decode($json);
-        return new Medico($json->nome, $json->crm);
+        $especialidade = $this->especialidadeRepository->find($json->especialidadeId);
+        return new Medico($json->nome, $json->crm, $especialidade);
     }
 }
