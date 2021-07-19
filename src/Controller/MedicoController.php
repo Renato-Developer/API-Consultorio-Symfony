@@ -104,6 +104,17 @@ class MedicoController extends AbstractController
         return new Response('', 200);
     }
 
+    /**
+     * @Route("/especialidades/{especialidadeId}/medicos", methods="GET")
+     */
+    public function buscarMedicoPorEspecialidade(int $especialidadeId): Response
+    {
+        $medicos = $this->medicoRepository->findBy([
+            'especialidade' => $especialidadeId
+        ]);
+        return new JsonResponse($medicos);
+    }
+
     private function buscaMedicoPorId(int $id): Medico
     {
         /**@var Medico $medico*/
