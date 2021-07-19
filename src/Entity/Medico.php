@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=MedicoRepository::class)
  */
 class Medico implements \JsonSerializable
 {
@@ -35,7 +35,6 @@ class Medico implements \JsonSerializable
 
     public function __construct(string $nome , string $crm, Especialidade $especialidade)
     {
-
         $this->nome = $nome;
         $this->crm = $crm;
         $this->especialidade = $especialidade;

@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Especialidade;
+use App\Entity\Medico;
+use App\Repository\EspecialidadeRepository;
+use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,10 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class EspecialidadesController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private EspecialidadeRepository $especialidadeRepository;
+    private MedicoRepository $medicoRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        EspecialidadeRepository $especialidadeRepository,
+        MedicoRepository $medicoRepository
+    )
     {
         $this->entityManager = $entityManager;
+        $this->especialidadeRepository = $especialidadeRepository;
+        $this->medicoRepository = $medicoRepository;
     }
 
     /**
@@ -41,12 +52,7 @@ class EspecialidadesController extends AbstractController
      */
     public function buscarEspecialidades(): Response
     {
-        $especialidadeRepository = $this
-            ->entityManager
-            ->getRepository(Especialidade::class);
-
-        $especialidades = $especialidadeRepository->findAll();
-
+        $especialidades = $this->especialidadeRepository->findAll();
         return new JsonResponse($especialidades);
     }
 
@@ -85,12 +91,20 @@ class EspecialidadesController extends AbstractController
         return new JsonResponse('', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @Route("/especialidades/{id}/medicos")
+     */
+    public function buscarMedicoPorEspecialidade(int $id): Response
+    {
+        $medicos = $this->medicoRepository->findBy([
+            'especialidade' => $id
+        ]);
+        return new JsonResponse($medicos);
+    }
+
     private function buscarEspecialidadePorId(int $id)
     {
-        $especialidade = $this
-            ->entityManager
-            ->getRepository(Especialidade::class)
-            ->find($id);
+        $especialidade = $this->especialidadeRepository->find($id);
         /**@var Especialidade $especialidade*/
         return $especialidade;
     }

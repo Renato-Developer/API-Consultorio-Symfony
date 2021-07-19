@@ -7,6 +7,7 @@ use App\Entity\Especialidade;
 use App\Entity\Medico;
 use App\Helper\MedicoFactory;
 use App\Repository\EspecialidadeRepository;
+use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,11 +19,17 @@ class MedicoController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
     private MedicoFactory $medicoFactory;
+    private MedicoRepository $medicoRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MedicoFactory $medicoFactory,
+        MedicoRepository $medicoRepository
+    )
     {
         $this->entityManager = $entityManager;
         $this->medicoFactory = $medicoFactory;
+        $this->medicoRepository = $medicoRepository;
     }
 
     /**
@@ -44,12 +51,7 @@ class MedicoController extends AbstractController
      */
     public function buscarMedicos(): Response
     {
-        $medicosRepository = $this
-            ->getDoctrine()
-            ->getRepository(Medico::class);
-
-        $medicos = $medicosRepository->findAll();
-
+        $medicos = $this->medicoRepository->findAll();
         return new JsonResponse($medicos);
     }
 
@@ -60,7 +62,6 @@ class MedicoController extends AbstractController
     {
         $medico = $this->buscaMedicoPorId($id);
         $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : 200;
-
         return new JsonResponse($medico, $codigoRetorno);
     }
 
@@ -105,11 +106,8 @@ class MedicoController extends AbstractController
 
     private function buscaMedicoPorId(int $id): Medico
     {
-        $medicosRepository = $this
-            ->getDoctrine()
-            ->getRepository(Medico::class);
-
-        /**@var Medico $medicosRepository*/
-        return $medicosRepository->find($id);
+        /**@var Medico $medico*/
+        $medico = $this->medicoRepository->find($id);
+        return $medico;
     }
 }
