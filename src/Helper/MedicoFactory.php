@@ -7,7 +7,7 @@ use App\Entity\Medico;
 use App\Repository\EspecialidadeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class MedicoFactory
+class MedicoFactory implements EntityFactoryInterface
 {
     private EspecialidadeRepository $especialidadeRepository;
 
@@ -16,9 +16,9 @@ class MedicoFactory
         $this->especialidadeRepository = $especialidadeRepository;
     }
 
-    public function criarMedico(string $json): Medico
+    public function criar(string $bodyRequest)
     {
-        $json = json_decode($json);
+        $json = json_decode($bodyRequest);
         $especialidade = $this->especialidadeRepository->find($json->especialidadeId);
         return new Medico($json->nome, $json->crm, $especialidade);
     }

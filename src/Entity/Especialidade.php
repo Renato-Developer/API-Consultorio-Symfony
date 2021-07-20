@@ -35,7 +35,6 @@ class Especialidade implements \JsonSerializable
     public function setDescricao(string $descricao): self
     {
         $this->descricao = $descricao;
-
         return $this;
     }
 
