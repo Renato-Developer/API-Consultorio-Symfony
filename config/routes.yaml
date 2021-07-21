@@ -61,3 +61,9 @@ especialidades_atualizar:
   methods:
     - PUT
   controller: App\Controller\EspecialidadesController::atualizar
+
+buscar_medicos_por_especialidade:
+  path: /especialidades/{especialidadeId}/medicos
+  methods:
+    - GET
+  controller: App\Controller\MedicoController::buscarMedicoPorEspecialidade

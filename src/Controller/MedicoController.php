@@ -22,12 +22,9 @@ class MedicoController extends BaseController
         parent::__construct($entityManager, $medicoRepository, $medicoFactory);
     }
 
-    /**
-     * @Route("/especialidades/{especialidadeId}/medicos", methods="GET")
-     */
     public function buscarMedicoPorEspecialidade(int $especialidadeId): Response
     {
-        $medicos = $this->medicoRepository->findBy([
+        $medicos = $this->repository->findBy([
             'especialidade' => $especialidadeId
         ]);
         return new JsonResponse($medicos);
