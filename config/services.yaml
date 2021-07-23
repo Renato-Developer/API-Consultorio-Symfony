@@ -20,6 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+            - '../src/Helper/ResponseFactory.php'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed

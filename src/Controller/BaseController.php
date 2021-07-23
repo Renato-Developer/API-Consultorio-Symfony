@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Helper\EntityFactoryInterface;
 use App\Helper\ExtratorDeDadosDoRequest;
+use App\Helper\ResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,14 +57,19 @@ abstract class BaseController extends AbstractController
             ($paginaAtual -1) * $itensPorPagina
         );
 
-        return new JsonResponse($entityList);
+        $statusCode = is_null($entityList) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
+
+        $resposta = new ResponseFactory(true, $entityList, $statusCode, $paginaAtual, $itensPorPagina);
+
+        return $resposta->getResponse();
     }
 
     public function buscarPorId(int $id): Response
     {
         $entity = $this->repository->find($id);
-        $statusCode = is_null($entity) ? Response::HTTP_NO_CONTENT : 200;
-        return new JsonResponse($entity, $statusCode);
+        $statusCode = is_null($entity) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
+        $resposta = new ResponseFactory(true, $entity, $statusCode);
+        return $resposta->getResponse();
     }
 
     public function atualizar(int $id, Request $request): Response
