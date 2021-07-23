@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Especialidade;
 use App\Entity\Medico;
+use App\Helper\ExtratorDeDadosDoRequest;
 use App\Helper\MedicoFactory;
 use App\Repository\EspecialidadeRepository;
 use App\Repository\MedicoRepository;
@@ -17,9 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MedicoController extends BaseController
 {
-    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $medicoRepository)
-    {
-        parent::__construct($entityManager, $medicoRepository, $medicoFactory);
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        MedicoFactory $medicoFactory,
+        MedicoRepository $medicoRepository,
+        ExtratorDeDadosDoRequest $extratorDeDadosDoRequest
+    ) {
+        parent::__construct(
+            $entityManager,
+            $medicoRepository,
+            $medicoFactory,
+            $extratorDeDadosDoRequest
+        );
     }
 
     public function buscarMedicoPorEspecialidade(int $especialidadeId): Response
