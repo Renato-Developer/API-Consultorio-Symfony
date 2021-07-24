@@ -77,16 +77,20 @@ abstract class BaseController extends AbstractController
         $bodyRequest = $request->getContent();
         $entidadeEnviada = $this->entityFactory->criar($bodyRequest);
 
-        $entidadeExistente = $this->repository->find($id);
-        if (is_null($entidadeExistente)) {
-            return new Response('', Response::HTTP_NOT_FOUND);
+        try {
+            $entidadeExistente = $this->atualizarEntidade($id, $entidadeEnviada);
+            $this->entityManager->flush();
+
+            $resposta = new ResponseFactory(true, $entidadeExistente);
+            return $resposta->getResponse();
+        } catch (\InvalidArgumentException $ex) {
+            $resposta = new ResponseFactory(
+                false,
+                "Conteúdo não encontrado",
+                Response::HTTP_NOT_FOUND
+            );
         }
 
-        $this->atualizarEntidade($entidadeExistente, $entidadeEnviada);
-
-        $this->entityManager->flush();
-
-        return new JsonResponse($entidadeExistente);
     }
 
     public function remover(int $id): Response

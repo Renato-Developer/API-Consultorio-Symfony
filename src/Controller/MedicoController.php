@@ -10,6 +10,7 @@ use App\Helper\MedicoFactory;
 use App\Repository\EspecialidadeRepository;
 use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,10 +41,18 @@ class MedicoController extends BaseController
         return new JsonResponse($medicos);
     }
 
-    public function atualizarEntidade($entidadeExistente, $entidadeEnviada)
+    public function atualizarEntidade($id, $entidadeEnviada)
     {
+        $entidadeExistente = $this->repository->find($id);
+
+        if (is_null($entidadeExistente)){
+            throw new InvalidArgumentException();
+        }
+
         $entidadeExistente->setNome($entidadeEnviada->getNome());
         $entidadeExistente->setCrm($entidadeEnviada->getCrm());
         $entidadeExistente->setEspecialidade($entidadeEnviada->getEspecialidade());
+
+        return $entidadeExistente;
     }
 }

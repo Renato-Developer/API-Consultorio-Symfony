@@ -29,7 +29,7 @@ class ResponseFactory
         $this->statusCode = $statusCode;
     }
 
-    public function getResponse(): JsonResponse
+    public function getResponse()
     {
         $resposta = [
             'sucesso' => $this->sucesso,
