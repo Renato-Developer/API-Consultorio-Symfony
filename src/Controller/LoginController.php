@@ -44,12 +44,12 @@ class LoginController extends AbstractController
 
         if(!$this->hasher->isPasswordValid($user, $dadosEmJson->password)) {
             return new JsonResponse([
-                'error' => 'Usuário ou Senha Inválidos',
+                'error' => 'Usuário ou Senha Inválidos'],
                 Response::HTTP_UNAUTHORIZED
-            ]);
+            );
         }
 
-        $token = JWT::encode(['username', $user->getUserIdentifier()], 'SecretKey');
+        $token = JWT::encode(['username' => $user->getUserIdentifier()], 'SecretKey', 'HS256');
 
         return new JsonResponse([
             'acess_token' => $token
