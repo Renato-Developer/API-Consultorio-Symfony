@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-class AutenticadorJwt extends AbstractGuardAuthenticator
+class AutenticadorJwtDeprecated extends AbstractGuardAuthenticator
 {
 
     private UserRepository $repository;
