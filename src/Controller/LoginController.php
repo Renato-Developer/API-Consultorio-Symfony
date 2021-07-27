@@ -23,10 +23,7 @@ class LoginController extends AbstractController
         $this->hasher = $hasher;
     }
 
-    /**
-     * @Route("/login", name="login")
-     */
-    public function index(Request $request): Response
+    public function login(Request $request): Response
     {
         $dadosEmJson = json_decode($request->getContent());
 

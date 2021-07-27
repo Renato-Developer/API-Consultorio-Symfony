@@ -67,3 +67,9 @@ buscar_medicos_por_especialidade:
   methods:
     - GET
   controller: App\Controller\MedicoController::buscarMedicoPorEspecialidade
+
+login:
+  path: /login
+  methods:
+    - GET
+  controller: App\Controller\LoginController::login
