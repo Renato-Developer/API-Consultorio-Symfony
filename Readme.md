@@ -38,10 +38,10 @@ design patterns.
    $ git clone https://github.com/Renato-Developer/API-Consultorio-Symfony.git
 
    - Check the directory:
-   $ cd /var/www/html/<NameOfProject>
+   $ cd /var/www/html/<ProjectName>
 
    - Open your browser in:
-   http://localhost/<NameOfProject>
+   http://localhost/<ProjectName>
    ```
 
 ---
