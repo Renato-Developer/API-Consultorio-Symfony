@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class LoginController extends AbstractController
 {
@@ -26,6 +27,8 @@ class LoginController extends AbstractController
     public function login(Request $request): Response
     {
         $dadosEmJson = json_decode($request->getContent());
+
+        $this->VerificarTodasAsPropriedades($dadosEmJson);
 
         if (is_null($dadosEmJson->username) OR is_null($dadosEmJson->password)) {
             return new JsonResponse(
@@ -51,5 +54,18 @@ class LoginController extends AbstractController
         return new JsonResponse([
             'acess_token' => $token
         ]);
+    }
+
+    /**
+     * @param $dadosEmJson
+     */
+    public function VerificarTodasAsPropriedades($dadosEmJson): void
+    {
+        if (
+            !property_exists($dadosEmJson, 'username') ||
+            !property_exists($dadosEmJson, 'password')
+        ) {
+            throw new AuthenticationException('Erro no Login');
+        }
     }
 }

@@ -1,0 +1,53 @@
+<?php
+
+namespace App\EventListener;
+
+use App\Helper\FactoryException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
+class ExceptionHandler implements EventSubscriberInterface
+{
+
+    public static function getSubscribedEvents()
+    {
+        return [
+          KernelEvents::EXCEPTION => [
+              ['handleLoginException', 2],
+              ['handleEntityException', 1],
+              ['handle404Exception', 0]
+          ],
+        ];
+    }
+
+    public function handle404Exception(ExceptionEvent $event)
+    {
+        if($event->getThrowable() instanceof NotFoundHttpException) {
+            $event->setResponse(new JsonResponse([
+                'mensagem' => 'erro 404',
+            ]));
+        }
+    }
+
+    public function handleEntityException(ExceptionEvent $event)
+    {
+        if ($event->getThrowable() instanceof FactoryException) {
+            $event->setResponse(new JsonResponse([
+                'mensagem' => 'Erro Na criação da Entidade, favor verificar o nome dos parâmetros enviados',
+            ]));
+        }
+    }
+
+    public function handleLoginException(ExceptionEvent $event)
+    {
+        if ($event->getThrowable() instanceof AuthenticationException) {
+            $event->setResponse(new JsonResponse([
+                'mensagem' => 'Erro ao realizar Login, favor verifique os parâmetros enviados',
+            ]));
+        }
+    }
+}
