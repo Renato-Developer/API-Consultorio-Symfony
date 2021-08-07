@@ -9,6 +9,7 @@ use App\Helper\ExtratorDeDadosDoRequest;
 use App\Helper\ResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,10 @@ abstract class BaseController extends AbstractController
     protected ObjectRepository $repository;
     protected EntityFactoryInterface $entityFactory;
     protected ExtratorDeDadosDoRequest $extratorDeDadosDoRequest;
+    private CacheItemPoolInterface $cache;
 
     public function __construct(
+        CacheItemPoolInterface $cache,
         EntityManagerInterface $entityManager,
         ObjectRepository $repository,
         EntityFactoryInterface $entityFactory,
@@ -31,6 +34,7 @@ abstract class BaseController extends AbstractController
         $this->repository = $repository;
         $this->entityFactory = $entityFactory;
         $this->extratorDeDadosDoRequest = $extratorDeDadosDoRequest;
+        $this->cache = $cache;
     }
 
     public function novo(Request $request): Response
@@ -40,6 +44,10 @@ abstract class BaseController extends AbstractController
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
+
+        $cacheItem = $this->cache->getItem($this->cachePrefix(), $entity->getId());
+        $cacheItem->set($entity);
+        $this->cache->save($cacheItem);
 
         return new JsonResponse($entity);
     }
@@ -90,7 +98,6 @@ abstract class BaseController extends AbstractController
                 Response::HTTP_NOT_FOUND
             );
         }
-
     }
 
     public function remover(int $id): Response
@@ -105,4 +112,5 @@ abstract class BaseController extends AbstractController
     }
 
     abstract public function atualizarEntidade($entidadeExistente, $entidadeEnviada);
+    abstract public function cachePrefix(): string;
 }

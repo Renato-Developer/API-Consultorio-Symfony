@@ -11,6 +11,7 @@ use App\Repository\EspecialidadeRepository;
 use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\InvalidArgumentException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MedicoController extends BaseController
 {
     public function __construct(
+        CacheItemPoolInterface $cache,
         EntityManagerInterface $entityManager,
         MedicoFactory $medicoFactory,
         MedicoRepository $medicoRepository,
         ExtratorDeDadosDoRequest $extratorDeDadosDoRequest
     ) {
         parent::__construct(
+            $cache,
             $entityManager,
             $medicoRepository,
             $medicoFactory,
@@ -54,5 +57,10 @@ class MedicoController extends BaseController
         $entidadeExistente->setEspecialidade($entidadeEnviada->getEspecialidade());
 
         return $entidadeExistente;
+    }
+
+    public function cachePrefix(): string
+    {
+        return 'medico_';
     }
 }
