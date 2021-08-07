@@ -11,12 +11,21 @@ class EspecialidadeFactory implements EntityFactoryInterface
     {
         $json = json_decode($bodyRequest);
 
-        if (!property_exists($json, 'descricao')) {
-            throw new FactoryException('Especialidade precisa de descricao');
-        }
+        $this->verificarTodasAsPropriedas($json);
 
         $especialidade = new Especialidade();
         $especialidade->setDescricao($json->descricao);
         return $especialidade;
+    }
+
+    /**
+     * @param $json
+     * @throws FactoryException
+     */
+    public function verificarTodasAsPropriedas($json): void
+    {
+        if (!property_exists($json, 'descricao')) {
+            throw new FactoryException('Especialidade precisa de descricao');
+        }
     }
 }
