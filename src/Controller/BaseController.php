@@ -40,12 +40,13 @@ abstract class BaseController extends AbstractController
     public function novo(Request $request): Response
     {
         $bodyRequest = $request->getContent();
+
         $entity = $this->entityFactory->criar($bodyRequest);
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 
-        $cacheItem = $this->cache->getItem($this->cachePrefix(), $entity->getId());
+        $cacheItem = $this->cache->getItem($this->cachePrefix() . $entity->getId());
         $cacheItem->set($entity);
         $this->cache->save($cacheItem);
 
@@ -66,7 +67,6 @@ abstract class BaseController extends AbstractController
         );
 
         $statusCode = is_null($entityList) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
-
         $resposta = new ResponseFactory(true, $entityList, $statusCode, $paginaAtual, $itensPorPagina);
 
         return $resposta->getResponse();
@@ -74,7 +74,10 @@ abstract class BaseController extends AbstractController
 
     public function buscarPorId(int $id): Response
     {
-        $entity = $this->repository->find($id);
+        $entity = $this->cache->hasItem($this->cachePrefix() . $id)
+        ? $this->cache->getItem($this->cachePrefix() . $id)->get()
+        : $this->repository->find($id);
+
         $statusCode = is_null($entity) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
         $resposta = new ResponseFactory(true, $entity, $statusCode);
         return $resposta->getResponse();
@@ -89,8 +92,13 @@ abstract class BaseController extends AbstractController
             $entidadeExistente = $this->atualizarEntidade($id, $entidadeEnviada);
             $this->entityManager->flush();
 
+            $cacheItem = $this->cache->getItem($this->cachePrefix() . $id);
+            $cacheItem->set($entidadeExistente);
+            $this->cache->save($cacheItem);
+
             $resposta = new ResponseFactory(true, $entidadeExistente);
             return $resposta->getResponse();
+
         } catch (\InvalidArgumentException $ex) {
             $resposta = new ResponseFactory(
                 false,
@@ -108,6 +116,11 @@ abstract class BaseController extends AbstractController
         }
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+
+        if($this->cache->hasItem($this->cachePrefix() . $id)) {
+            $this->cache->deleteItem($this->cachePrefix() . $id);
+        }
+
         return new Response('', 200);
     }
 

@@ -35,7 +35,7 @@ class EspecialidadesController extends BaseController
     public function atualizarEntidade($id, $entidadeEnviada)
     {
         $entidadeExistente = $this->repository->find($id);
-        $entidadeExistente->setDescricao($entidadeEnviada->getDescricao());
+        return $entidadeExistente->setDescricao($entidadeEnviada->getDescricao());
     }
 
     public function cachePrefix(): string
