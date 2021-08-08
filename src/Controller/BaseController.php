@@ -10,6 +10,7 @@ use App\Helper\ResponseFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +22,11 @@ abstract class BaseController extends AbstractController
     protected ObjectRepository $repository;
     protected EntityFactoryInterface $entityFactory;
     protected ExtratorDeDadosDoRequest $extratorDeDadosDoRequest;
-    private CacheItemPoolInterface $cache;
+    protected CacheItemPoolInterface $cache;
+    protected LoggerInterface $logger;
 
     public function __construct(
+        LoggerInterface $logger,
         CacheItemPoolInterface $cache,
         EntityManagerInterface $entityManager,
         ObjectRepository $repository,
@@ -35,6 +38,7 @@ abstract class BaseController extends AbstractController
         $this->entityFactory = $entityFactory;
         $this->extratorDeDadosDoRequest = $extratorDeDadosDoRequest;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     public function novo(Request $request): Response
@@ -49,6 +53,12 @@ abstract class BaseController extends AbstractController
         $cacheItem = $this->cache->getItem($this->cachePrefix() . $entity->getId());
         $cacheItem->set($entity);
         $this->cache->save($cacheItem);
+
+        $this->logger
+            ->notice('Novo Registro de {entidade} adicionado com o id: {id}', [
+            'entidade' => get_class($entity),
+            'id' => $entity->getId()
+        ]);
 
         return new JsonResponse($entity);
     }

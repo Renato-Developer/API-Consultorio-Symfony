@@ -8,6 +8,7 @@ use App\Helper\ExtratorDeDadosDoRequest;
 use App\Repository\EspecialidadeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EspecialidadesController extends BaseController
 {
     public function __construct(
+        LoggerInterface $logger,
         CacheItemPoolInterface $cache,
         EntityManagerInterface $entityManager,
         EspecialidadeRepository $especialidadeRepository,
@@ -24,6 +26,7 @@ class EspecialidadesController extends BaseController
         ExtratorDeDadosDoRequest $extratorDeDadosDoRequest
     ) {
         parent::__construct(
+            $logger,
             $cache,
             $entityManager,
             $especialidadeRepository,

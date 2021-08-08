@@ -12,6 +12,7 @@ use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\InvalidArgumentException;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MedicoController extends BaseController
 {
     public function __construct(
+        LoggerInterface $logger,
         CacheItemPoolInterface $cache,
         EntityManagerInterface $entityManager,
         MedicoFactory $medicoFactory,
@@ -28,6 +30,7 @@ class MedicoController extends BaseController
         ExtratorDeDadosDoRequest $extratorDeDadosDoRequest
     ) {
         parent::__construct(
+            $logger,
             $cache,
             $entityManager,
             $medicoRepository,
