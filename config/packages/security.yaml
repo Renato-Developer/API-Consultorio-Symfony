@@ -17,6 +17,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^\/(?!.*especialidades-html).*$
             lazy: true
             provider: app_user_provider
             custom_authenticators:

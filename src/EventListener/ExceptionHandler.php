@@ -28,7 +28,6 @@ class ExceptionHandler implements EventSubscriberInterface
               ['handleLoginException', 2],
               ['handleEntityException', 1],
               ['handle404Exception', 0],
-              ['handleGenericException', -1],
           ],
         ];
     }
@@ -58,17 +57,5 @@ class ExceptionHandler implements EventSubscriberInterface
                 'Mensagem' => 'Erro ao realizar Login, favor verifique os parâmetros enviados',
             ]));
         }
-    }
-
-    public function handleGenericException(ExceptionEvent $event)
-    {
-        $mensagem = 'Uma execção ocorreu!';
-        $this->logger->critical($mensagem . '{stack}', [
-            'stack' => $event->getThrowable()->getTraceAsString()
-        ]);
-
-        $event->setResponse(new JsonResponse([
-            'Mensagem' => $mensagem,
-        ]));
     }
 }

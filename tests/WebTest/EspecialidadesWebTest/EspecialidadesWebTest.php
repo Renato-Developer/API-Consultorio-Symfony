@@ -64,4 +64,13 @@ class EspecialidadesWebTest extends WebTestCase
         $token = json_decode($client->getResponse()->getContent());
         return $token->access_token;
     }
+
+    public function testH1Especialidades()
+    {
+        $client = self::createClient();
+        $client->request('GET', '/especialidades-html');
+
+        self::assertSelectorTextContains('h1', 'Especialidades');
+        self::assertSelectorExists('.especialidade');
+    }
 }
