@@ -60,7 +60,7 @@ abstract class BaseController extends AbstractController
             'id' => $entity->getId()
         ]);
 
-        return new JsonResponse($entity);
+        return new JsonResponse($entity, Response::HTTP_CREATED);
     }
 
     public function buscarTodos(Request $request): Response

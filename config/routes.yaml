@@ -71,5 +71,5 @@ buscar_medicos_por_especialidade:
 login:
   path: /login
   methods:
-    - GET
+    - POST
   controller: App\Controller\LoginController::login

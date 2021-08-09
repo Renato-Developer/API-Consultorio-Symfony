@@ -52,7 +52,7 @@ class LoginController extends AbstractController
         $token = JWT::encode(['username' => $user->getUserIdentifier()], 'SecretKey', 'HS256');
 
         return new JsonResponse([
-            'acess_token' => $token
+            'access_token' => $token
         ]);
     }
 
