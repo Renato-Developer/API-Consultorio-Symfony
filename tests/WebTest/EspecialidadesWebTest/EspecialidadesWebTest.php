@@ -5,6 +5,7 @@ namespace App\tests\WebTest\EspecialidadesWebTest;
 use http\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class EspecialidadesWebTest extends WebTestCase
 {

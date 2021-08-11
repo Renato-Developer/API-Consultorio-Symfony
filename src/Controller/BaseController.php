@@ -105,10 +105,6 @@ abstract class BaseController extends AbstractController
             $cacheItem = $this->cache->getItem($this->cachePrefix() . $id);
             $cacheItem->set($entidadeExistente);
             $this->cache->save($cacheItem);
-
-            $resposta = new ResponseFactory(true, $entidadeExistente);
-            return $resposta->getResponse();
-
         } catch (\InvalidArgumentException $ex) {
             $resposta = new ResponseFactory(
                 false,
@@ -116,6 +112,9 @@ abstract class BaseController extends AbstractController
                 Response::HTTP_NOT_FOUND
             );
         }
+
+        $resposta = new ResponseFactory(true, $entidadeExistente);
+        return $resposta->getResponse();
     }
 
     public function remover(int $id): Response
