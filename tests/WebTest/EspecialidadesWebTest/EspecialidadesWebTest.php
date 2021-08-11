@@ -48,11 +48,7 @@ class EspecialidadesWebTest extends WebTestCase
 
     private function login(KernelBrowser $client)
     {
-        $client->request(
-            'POST',
-            'login',
-            [],
-            [],
+        $client->request('POST', 'login', [], [],
             [
                 'CONTENT_TYPE' => 'application/json'
             ],

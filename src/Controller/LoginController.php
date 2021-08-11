@@ -18,8 +18,10 @@ class LoginController extends AbstractController
     private UserRepository $repository;
     private UserPasswordHasherInterface $hasher;
 
-    public function __construct(UserRepository $repository, UserPasswordHasherInterface $hasher)
-    {
+    public function __construct(
+        UserRepository $repository,
+        UserPasswordHasherInterface $hasher
+    ) {
         $this->repository = $repository;
         $this->hasher = $hasher;
     }
